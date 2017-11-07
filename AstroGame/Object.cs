@@ -4,7 +4,13 @@ using System.Drawing;
 
 namespace AstroGame
 {
-    class BaseObject
+    interface ICollision
+    {
+        bool Collision(ICollision obj);
+        Rectangle Rect { get; }
+    }
+
+    abstract class BaseObject : ICollision
     {
         protected Point pos;
         protected Point dir;
@@ -28,13 +34,12 @@ namespace AstroGame
         }
 
         /// <summary>
-        /// виртуальный класс 
-        /// </summary>
-        public virtual void Draw() { }
-
+        //    абстрактный клас, без тела, д. б. реализовон в потомке 
+        //    </summary>
+        public abstract void Draw(); //
 
         /// <summary>
-        /// виртуальный клас для обновления позиции любого объекта
+        /// виртуальный класc для обновления позиции любого объекта
         /// </summary>
         public virtual void Update()
         {
@@ -46,26 +51,36 @@ namespace AstroGame
                 pos.X = Game.Width;
                 pos.Y = rnd.Next(350);
             }
+         
+        }
+
+        public bool Collision(ICollision o)
+        {
+            if (o.Rect.IntersectsWith(this.Rect)) return true; else return false;
+        }
+
+        public Rectangle Rect
+        {
+            get { return new Rectangle(pos, size); }
         }
     }
-
     /// <summary>
     /// класс звезда, рандамно выбирает какую из двух картинок использовать
     /// </summary>
     class Star : BaseObject
     {
-        Image img;
-        public Star(Point pos, Point dir, Size size) : base(pos, dir, size) // конструктор 
+        Image img; // = Image.FromFile(Application.StartupPath + "../Star2.png");
+        public Star(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
             bool aster = Convert.ToBoolean(rnd.Next(0, 2));
             img = Image.FromFile(Application.StartupPath + ((aster == true) ? "../Star2.png" : "../star3.png"));
         }
         public override void Draw()
         {
+            //  Game.buffer.Graphics.DrawRectangle (Pens.White, pos.X, pos.Y, size.Width, size.Height);
             Game.buffer.Graphics.DrawImage(img, pos.X, pos.Y, 20, 20);
         }
     }
-
     /// <summary>
     /// класс планеты
     /// </summary>
@@ -87,6 +102,14 @@ namespace AstroGame
     class Asteroid : BaseObject
     {
         public int Power { get; set; }  // автоматическое свойство
+
+        // другая запись 
+        //int power;
+        //public int Power
+        //{
+        //    get { return power};
+        //    set { power = value};
+        //}
         Image img;
         public Asteroid(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
@@ -103,11 +126,13 @@ namespace AstroGame
             pos.X = 1000;
             pos.Y = rnd.Next(380);
         }
+
     }
 
     /// <summary>
     /// класс земля
     /// </summary>
+
     class Graund : BaseObject
     {
         Image img = Image.FromFile(Application.StartupPath + "../pluto.jpg");
@@ -116,16 +141,45 @@ namespace AstroGame
         }
         public override void Draw()
         {
-            Game.buffer.Graphics.DrawImage(img, pos.X, pos.Y, 4000, 150);
+            Game.buffer.Graphics.DrawImage(img, pos.X, pos.Y, 2000, 150);
         }
         public override void Update()
         {
+
             pos.X = pos.X + dir.X;
             if (pos.X < -1000)
             {
                 pos.X = 0;
             }
+
         }
+    }
+
+    class Bullet : BaseObject
+    {
+        public Bullet(Point pos, Point dir, Size size) : base(pos, dir, size)
+        {
+        }
+
+        // Image img = Image.FromFile(Application.StartupPath + "../pluto.jpg");
+
+        public override void Draw()
+        {
+            Game.buffer.Graphics.DrawRectangle(Pens.OrangeRed, pos.X, pos.Y, size.Width, size.Height);
+        }
+
+        public override void Update()
+        {
+
+            pos.X = pos.X + 10;
+        }
+        public void ChangePosition()
+        {
+            pos.X = 1;
+            pos.Y = rnd.Next(350);
+        }
+
+
     }
     /// <summary>
     /// класс галактика
@@ -144,15 +198,35 @@ namespace AstroGame
         {
         }
     }
-
     /// <summary>
     /// класс корабль
     /// </summary>
     class Ship : BaseObject
     {
+       
+
+        int energy = 100;
         Image img = Image.FromFile(Application.StartupPath + "../cruiser.png");
         public Ship(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
+        }
+
+        public int Energy
+        {
+            get
+            {
+                return energy;
+            }
+
+            set
+            {
+                energy = value;
+            }
+        }
+
+        public void EnergyLow(int n)
+        {
+            energy -= n;
         }
 
         public override void Draw()
@@ -162,5 +236,20 @@ namespace AstroGame
         public override void Update()
         {
         }
+
+        public void Up()
+        {
+            if (pos.Y > 0) pos.Y = pos.Y - dir.Y;
+        }
+
+        public void Down()
+        {
+            if (pos.Y < Game.Width) pos.Y = pos.Y + dir.Y;
+        }
+       
     }
+
+
+
 }
+

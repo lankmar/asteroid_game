@@ -12,10 +12,13 @@ namespace AstroGame
         static BaseObject graund;
         static Galaxy galaxy;
         static Ship ship;
+        static int shootCount = 0; // количество выстрелов( для счета в дальнейшем)
+        static int power;
         static public Random random = new Random();
         static Timer timer = new Timer();
         static BufferedGraphicsContext context; // объект контекст
         static public BufferedGraphics buffer;  // объект буфер
+        static List<Bullet> bullets = new List<Bullet>();
         static public int Width { get; set; }
         static public int Height { get; set; }
 
@@ -40,7 +43,21 @@ namespace AstroGame
             timer.Interval = 100;
             timer.Tick += Timer_Tick;
             timer.Start();
+            form.KeyDown += Form_KeyDown;
 
+        }
+
+        private static void Form_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Space)
+            {
+                bullets.Add(new Bullet(new Point(ship.Rect.X + 100, ship.Rect.Y + 20), new Point(4, 0), new Size(4, 1)));
+                shootCount++;
+            }// если нажали клавишу ControlKey, то создается пулька перед кораблем
+            if (e.KeyCode == Keys.Up) ship.Up();
+            //если клавиша вверх - событие ship.Up
+            if (e.KeyCode == Keys.Down) ship.Down();
+            // если клавиша вниз - ship.Down
         }
 
         /// <summary>
@@ -98,6 +115,7 @@ namespace AstroGame
                 if (aster != null) aster.Draw();
             }
             graund.Draw();
+            foreach (Bullet b in bullets) b.Draw();
             ship.Draw();
             buffer.Render();
         }
@@ -109,10 +127,32 @@ namespace AstroGame
         {
             foreach (BaseObject obj in objs) obj.Update();
             graund.Update();
-            galaxy.Update();
+            if (bullets != null)
+            {
+                //  bullets = new Bullet(new Point(30, 20), new Point(5, 0), new Size(5, 1));
+                foreach (Bullet b in bullets) b.Update();
+            }
             for (int i = 0; i < ast.Length; i++)
             {
-                ast[i].Update();
+                if (ast[i] != null)
+                {
+                    ast[i].Update();
+                    for (int j = 0; j < bullets.Count; j++)
+                        if (ast[i] != null && bullets[j].Collision(ast[i]))
+                        {
+                            System.Media.SystemSounds.Hand.Play();
+                            ast[i] = null;
+                            bullets.RemoveAt(j);
+                            continue;
+                        }
+                    if (ast[i] != null && ship.Collision(ast[i]))
+                    {
+                        ship.EnergyLow(random.Next(1, 10));
+                        System.Media.SystemSounds.Asterisk.Play();
+
+
+                    }
+                }
             }
         }
     }

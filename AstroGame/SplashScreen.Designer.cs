@@ -85,7 +85,7 @@
             this.Controls.Add(this.Records);
             this.Controls.Add(this.StartGameBtn);
             this.Name = "SplashScreen";
-            this.Text = "SplashScreen";
+            this.Text = "Asteroid";
             this.ResumeLayout(false);
 
         }
