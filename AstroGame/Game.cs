@@ -96,7 +96,17 @@ namespace AstroGame
             {
                 ast[i] = new Asteroid(new Point(random.Next(800), random.Next(400)), new Point(-random.Next(5, 15), 0), new Size(random.Next(25, 30), random.Next(25, 30)));
             }
-            ship = new Ship(new Point(10, 200), new Point(5, 10), new Size(50, 50));
+            //обработка исключений 
+            try
+            {
+            ship = new Ship(new Point(random.Next(-20,10), 200), new Point(5, 10), new Size(50, 50));
+            
+            }
+            catch (MyException e)
+            {
+                Console.WriteLine(e);
+                ship = new Ship(new Point( 10, 200), new Point(5, 10), new Size(50, 50)); //повторное создание коробля уже с установленными данными
+            }
         }
 
         /// <summary>
@@ -129,7 +139,6 @@ namespace AstroGame
             graund.Update();
             if (bullets != null)
             {
-                //  bullets = new Bullet(new Point(30, 20), new Point(5, 0), new Size(5, 1));
                 foreach (Bullet b in bullets) b.Update();
             }
             for (int i = 0; i < ast.Length; i++)

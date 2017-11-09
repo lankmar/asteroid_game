@@ -25,8 +25,9 @@ namespace AstroGame
         }
 
         public int PosX
-        {
-            set { if (value > 0) pos.X = value; }
+        { 
+            get { return pos.X; } // для обработки ошибок
+            set { pos.X = value; } // { if (value > 0) pos.X = value; }
         }
         public int PosY
         {
@@ -97,7 +98,7 @@ namespace AstroGame
         }
     }
     /// <summary>
-    /// класс астеройд
+    /// класс астероид
     /// </summary>
     class Asteroid : BaseObject
     {
@@ -203,12 +204,16 @@ namespace AstroGame
     /// </summary>
     class Ship : BaseObject
     {
-       
-
         int energy = 100;
         Image img = Image.FromFile(Application.StartupPath + "../cruiser.png");
         public Ship(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
+            // обработка ошибки по параметру положения коробля
+            if (PosX < 10)
+            {
+                pos.X= 10;
+                throw new MyException();
+            }
         }
 
         public int Energy
@@ -246,10 +251,6 @@ namespace AstroGame
         {
             if (pos.Y < Game.Width) pos.Y = pos.Y + dir.Y;
         }
-       
-    }
-
-
-
+     }
 }
 
