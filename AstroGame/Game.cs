@@ -156,10 +156,7 @@ namespace AstroGame
                         }
                     if (ast[i] != null && ship.Collision(ast[i]))
                     {
-                        ship.EnergyLow(random.Next(1, 10));
                         System.Media.SystemSounds.Asterisk.Play();
-
-
                     }
                 }
             }
