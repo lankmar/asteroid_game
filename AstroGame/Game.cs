@@ -95,7 +95,7 @@ namespace AstroGame
             if (flag == false)
             {
                 level++;
-                if (level == 3)
+                if (level ==11)
                 {
                     Finish();
                     return;

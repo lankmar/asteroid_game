@@ -8,6 +8,8 @@ namespace AstroGame
 {
 
     public delegate void LogMessage(object o);
+    
+    
     class Log
     {
         LogMessage myDelegate;
