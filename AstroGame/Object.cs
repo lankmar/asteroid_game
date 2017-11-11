@@ -4,6 +4,7 @@ using System.Drawing;
 
 namespace AstroGame
 {
+    delegate void Message();
     /// <summary>
     /// Интерфейс для обработки столкновений
     /// </summary>
@@ -41,7 +42,7 @@ namespace AstroGame
         //    абстрактный клас, без тела, должен быть реализовон в потомке 
         //    </summary>
         public abstract void Draw(); //
-
+       
         /// <summary>
         /// виртуальный класc для обновления позиции любого объекта
         /// </summary>
@@ -86,9 +87,9 @@ namespace AstroGame
         }
         public override void Draw()
         {
-            //  Game.buffer.Graphics.DrawRectangle (Pens.White, pos.X, pos.Y, size.Width, size.Height);
             Game.buffer.Graphics.DrawImage(img, pos.X, pos.Y, 20, 20);
         }
+       
     }
 
     /// <summary>
@@ -101,8 +102,7 @@ namespace AstroGame
         {
         }
         public override void Draw()
-        {
-            //  Game.buffer.Graphics.DrawRectangle (Pens.White, pos.X, pos.Y, size.Width, size.Height);
+        { 
             Game.buffer.Graphics.DrawImage(img, pos.X, pos.Y, 50, 50);
         }
     }
@@ -129,6 +129,15 @@ namespace AstroGame
             pos.X = 1000;
             pos.Y = rnd.Next(380);
         }
+
+        internal static void MessageCreate(object o)
+        {
+            Console.WriteLine($"{DateTime.Now} Астероид создан, {o.GetType()} ");
+        }
+        internal static void MessageDestroy(object o)
+        {
+            Console.WriteLine($"{DateTime.Now} Астеройд уничтожен, { o.GetType()} ");
+        }
     }
 
     /// <summary>
@@ -151,6 +160,10 @@ namespace AstroGame
             {
                 pos.X = 0;
             }
+        }
+        public void Message(object o)
+        {
+            Console.WriteLine($"{DateTime.Now} Земля создана, { o.GetType()} ");
         }
     }
 
@@ -175,6 +188,10 @@ namespace AstroGame
             pos.X = 1;
             pos.Y = rnd.Next(350);
         }
+        public static void MessageShot(object o)
+        {
+            Console.WriteLine($"{DateTime.Now} Выстрел, {o.ToString()} ");
+        }
     }
 
     /// <summary>
@@ -193,6 +210,10 @@ namespace AstroGame
         public override void Update()
         {
         }
+        public void Message(object o)
+        {
+            Console.WriteLine($"{DateTime.Now}  Галактика создана, {o.ToString()} ");
+        }
     }
 
     /// <summary>
@@ -200,15 +221,33 @@ namespace AstroGame
     /// </summary>
     class Ship : BaseObject
     {
+        int energy = 100;
         Image img = Image.FromFile(Application.StartupPath + "../cruiser.png");
         public Ship(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
-            // обработка ошибки по параметру положения коробля
-            if (PosX < 10)
+        }
+
+        public int Energy
+        {
+            get
             {
-                pos.X= 10;
-                throw new MyException();
+                return energy;
             }
+
+            set
+            {
+                energy = value;
+            }
+        }
+
+        public void EnergyLow(int n)
+        {
+            energy -= n;
+        }
+
+        internal void EnergyUp(int n)
+        {
+            energy += n;
         }
         public override void Draw()
         {
@@ -227,6 +266,50 @@ namespace AstroGame
         {
             if (pos.Y < Game.Width) pos.Y = pos.Y + dir.Y;
         }
-     }
+
+        public static event Message MessageDie;
+
+        public void Die()
+        {
+            if (MessageDie != null) MessageDie();
+        }
+        public void Message(object o)
+        {
+            Console.WriteLine($"{DateTime.Now} Создан корабль, { o.GetType()} ");
+        }
+
+        internal static void MessageDamege(object o)
+        {
+            Console.WriteLine($"{DateTime.Now} Корабль получил повреждения,  {o.GetType()} ");
+        }
+
+        internal static void MessageRepaire(object o)
+        {
+            Console.WriteLine($"{DateTime.Now} Корабль отремонтирован, { o.GetType()} ");
+        }
+    }
+
+
+        /// <summary>
+        /// класс ремонт
+        /// </summary>
+        class Repairs : BaseObject
+        {
+            public int Power { get; set; }  // автоматическое свойство
+            Image img = Image.FromFile(Application.StartupPath + "../repaire.png");
+            public Repairs(Point pos, Point dir, Size size) : base(pos, dir, size)
+            {
+                Power = rnd.Next(5,10);
+            }
+            public override void Draw()
+            {
+                Game.buffer.Graphics.DrawImage(img, pos.X, pos.Y, 20, 20);
+            }
+            public void ChangePosition()
+            {
+                pos.X = 1000;
+                pos.Y = rnd.Next(380);
+            }
+        }
 }
 
