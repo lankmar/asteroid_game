@@ -72,6 +72,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Ship.cs" />
     <Compile Include="SplashScreen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,6 +103,60 @@
     <EmbeddedResource Include="SplashScreen.resx">
       <DependentUpon>SplashScreen.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\home_galaxy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\aster1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\aster2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\cruiser.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\backgraund.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\pluto.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\planet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\star3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Star2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\repaire.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\aster1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\aster2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\backgraund.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cruiser.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\planet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pluto.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Star2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\star3.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

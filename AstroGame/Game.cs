@@ -92,7 +92,7 @@ namespace AstroGame
                     break;
                 }
             }
-            if (flag == false)
+            if (!flag)
             {
                 level++;
                 if (level ==11)
@@ -146,14 +146,8 @@ namespace AstroGame
         {
             buffer.Graphics.Clear(Color.Black);
             galaxy.Draw();
-            foreach (BaseObject obj in objs)
-            {
-                obj.Draw();
-            }
-             foreach (Asteroid ast in aster)
-            {
-                if (ast != null) ast.Draw();
-            }
+            foreach (BaseObject obj in objs)  obj.Draw();
+            foreach (Asteroid ast in aster)  if (ast != null) ast.Draw();
             graund.Draw();
             foreach (Bullet b in bullets) b.Draw();
             ship.Draw();

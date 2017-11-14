@@ -12,7 +12,6 @@ namespace AstroGame
 
     class Program
     {
-
         static public bool flag = true; // переменная проверяет не была ли нажата кнопка Выход
 
         static void Main(string[] args)

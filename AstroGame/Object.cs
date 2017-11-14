@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Resources;
 
 namespace AstroGame
 {
@@ -83,7 +84,7 @@ namespace AstroGame
         public Star(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
             bool aster = Convert.ToBoolean(rnd.Next(0, 2));
-            img = Image.FromFile(Application.StartupPath + ((aster == true) ? "../Star2.png" : "../star3.png"));
+            img = (aster == true) ? Properties.Resources.Star2: Properties.Resources.star3;
         }
         public override void Draw()
         {
@@ -97,7 +98,7 @@ namespace AstroGame
     /// </summary>
     class Planet : BaseObject
     {
-        Image img = Image.FromFile(Application.StartupPath + "../planet.png");
+        Image img = Properties.Resources.planet;
         public Planet(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
         }
@@ -117,7 +118,7 @@ namespace AstroGame
         public Asteroid(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
             bool aster = Convert.ToBoolean(rnd.Next(0, 2));
-            img = Image.FromFile(Application.StartupPath + ((aster == true) ? "../aster1.png" : "../aster2.png"));
+            img = (aster == true) ? Properties.Resources.aster1 : Properties.Resources.aster2;
             Power = rnd.Next(5);
         }
         public override void Draw()
@@ -145,7 +146,7 @@ namespace AstroGame
     /// </summary>
     class Graund : BaseObject
     {
-        Image img = Image.FromFile(Application.StartupPath + "../pluto.jpg");
+        Image img = Properties.Resources.pluto;
         public Graund(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
         }
@@ -199,7 +200,7 @@ namespace AstroGame
     /// </summary>
     class Galaxy : BaseObject
     {
-        Image img = Image.FromFile(Application.StartupPath + "../home_galaxy.png");
+        Image img = Properties.Resources.home_galaxy;
         public Galaxy(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
         }
@@ -216,87 +217,13 @@ namespace AstroGame
         }
     }
 
-    /// <summary>
-    /// класс корабль
-    /// </summary>
-    class Ship : BaseObject
-    {
-        int energy = 100;
-        Image img = Image.FromFile(Application.StartupPath + "../cruiser.png");
-        public Ship(Point pos, Point dir, Size size) : base(pos, dir, size)
-        {
-        }
-
-        public int Energy
-        {
-            get
-            {
-                return energy;
-            }
-
-            set
-            {
-                energy = value;
-            }
-        }
-
-        public void EnergyLow(int n)
-        {
-            energy -= n;
-        }
-
-        internal void EnergyUp(int n)
-        {
-            energy += n;
-        }
-        public override void Draw()
-        {
-            Game.buffer.Graphics.DrawImage(img, pos.X, pos.Y, 100, 50);
-        }
-        public override void Update()
-        {
-        }
-
-        public void Up()
-        {
-            if (pos.Y > 0) pos.Y = pos.Y - dir.Y;
-        }
-
-        public void Down()
-        {
-            if (pos.Y < Game.Width) pos.Y = pos.Y + dir.Y;
-        }
-
-        public static event Message MessageDie;
-
-        public void Die()
-        {
-            if (MessageDie != null) MessageDie();
-        }
-        public void Message(object o)
-        {
-            Console.WriteLine($"{DateTime.Now} Создан корабль, { o.GetType()} ");
-        }
-
-        internal static void MessageDamege(object o)
-        {
-            Console.WriteLine($"{DateTime.Now} Корабль получил повреждения,  {o.GetType()} ");
-        }
-
-        internal static void MessageRepaire(object o)
-        {
-            Console.WriteLine($"{DateTime.Now} Корабль отремонтирован, { o.GetType()} ");
-        }
-    }
-
-
         /// <summary>
         /// класс ремонт
         /// </summary>
         class Repairs : BaseObject
         {
             public int Power { get; set; }  // автоматическое свойство
-            Image img = Image.FromFile(Application.StartupPath + "../repaire.png");
+            Image img = Properties.Resources.repaire;
             public Repairs(Point pos, Point dir, Size size) : base(pos, dir, size)
             {
                 Power = rnd.Next(5,10);
