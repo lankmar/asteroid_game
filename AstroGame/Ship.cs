@@ -46,7 +46,17 @@ namespace AstroGame
 
         public void Down()
         {
-            if (pos.Y < Game.Width) pos.Y = pos.Y + dir.Y;
+            if (pos.Y < Game.Height-100) pos.Y = pos.Y + dir.Y;
+        }
+
+        public void Left()
+        {
+            if (pos.X > 0) pos.X = pos.X - dir.X;
+        }
+
+        public void Right()
+        {
+            if (pos.X < Game.Width-200) pos.X = pos.X + dir.X;
         }
 
         public static event Message MessageDie;

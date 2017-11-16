@@ -63,6 +63,9 @@ namespace AstroGame
             //если клавиша вверх - событие ship.Up
             if (e.KeyCode == Keys.Down) ship.Down();
             // если клавиша вниз - ship.Down
+            if (e.KeyCode == Keys.Right) ship.Right();
+            if (e.KeyCode == Keys.Left) ship.Left();
+
         }
 
         /// <summary>
